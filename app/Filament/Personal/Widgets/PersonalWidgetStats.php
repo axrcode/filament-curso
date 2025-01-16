@@ -16,7 +16,8 @@ class PersonalWidgetStats extends BaseWidget
         return [
             Stat::make('Holidays Pending', $this->getTotalHolidaysByUserAndType(auth()->user(), 'pending')),
             Stat::make('Holidays Approved', $this->getTotalHolidaysByUserAndType(auth()->user(), 'approved')),
-            Stat::make('Total Work', $this->getTotalWork(auth()->user())),
+            Stat::make('Total Work', $this->getTotalWork(auth()->user(), 'work')),
+            Stat::make('Total Pause', $this->getTotalWork(auth()->user(), 'pause')),
         ];
     }
 
@@ -27,10 +28,10 @@ class PersonalWidgetStats extends BaseWidget
             ->count();
     }
 
-    protected function getTotalWork(User $user)
+    protected function getTotalWork(User $user, $type)
     {
         $timesheets = Timesheet::where('user_id', $user->id)
-            ->where('type', 'work')
+            ->where('type', $type)
             ->get();
 
         $sumSeconds = 0;
