@@ -34,12 +34,12 @@ class CreateHoliday extends CreateRecord
 
         Mail::to($user)->send(new HolidayPending($dataToSend));
 
+        $recipient = auth()->user();
+
         Notification::make()
             ->title('Vacation Request')
             ->body('On '.$data['day'].' it is pending approval')
-            ->info()
-            ->color('info')
-            ->send();
+            ->sendToDatabase($recipient);
 
         return $data;
     }

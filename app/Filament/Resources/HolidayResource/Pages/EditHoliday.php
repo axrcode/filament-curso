@@ -7,6 +7,7 @@ use App\Mail\HolidayApproved;
 use App\Mail\HolidayDecline;
 use App\Models\User;
 use Filament\Actions;
+use Filament\Notifications\Notification;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Mail;
@@ -36,9 +37,19 @@ class EditHoliday extends EditRecord
 
         if ( $record->type == 'approved' ) {
             Mail::to($user)->send(new HolidayApproved($dataToSend));
+
+            Notification::make()
+                ->title('Vacation Request')
+                ->body('Your request for  '.$data['day'].' was approved')
+                ->sendToDatabase($user);
         }
         else if ( $record->type == 'decline' ) {
             Mail::to($user)->send(new HolidayDecline($dataToSend));
+
+            Notification::make()
+                ->title('Vacation Request')
+                ->body('Your request for  '.$data['day'].' was rejected')
+                ->sendToDatabase($user);
         }
 
         return $record;
