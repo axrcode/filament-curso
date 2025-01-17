@@ -7,6 +7,7 @@ use App\Models\Timesheet;
 use Carbon\Carbon;
 use Filament\Actions;
 use Filament\Actions\Action;
+use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ListRecords;
 
 class ListTimesheets extends ListRecords
@@ -52,6 +53,12 @@ class ListTimesheets extends ListRecords
                     $timesheet->day_in = Carbon::now();
                     $timesheet->type = 'work';
                     $timesheet->save();
+
+                    Notification::make()
+                        ->title('In Work Succefully')
+                        ->success()
+                        ->color('success')
+                        ->send();
                 }),
             Action::make('stopwork')
                 ->label('Stop Work')
@@ -62,6 +69,12 @@ class ListTimesheets extends ListRecords
                 ->action( function () use ($lastTimesheet) {
                     $lastTimesheet->day_out = Carbon::now();
                     $lastTimesheet->update();
+
+                    Notification::make()
+                        ->title('Stop Work Succefully')
+                        ->success()
+                        ->color('success')
+                        ->send();
                 }),
             Action::make('inpause')
                 ->label('In Pause')
@@ -79,6 +92,12 @@ class ListTimesheets extends ListRecords
                     $timesheet->day_in = Carbon::now();
                     $timesheet->type = 'pause';
                     $timesheet->save();
+
+                    Notification::make()
+                        ->title('In Pause Succefully')
+                        ->success()
+                        ->color('success')
+                        ->send();
                 }),
             Action::make('stoppause')
                 ->label('Stop Pause')
@@ -96,6 +115,12 @@ class ListTimesheets extends ListRecords
                     $timesheet->day_in = Carbon::now();
                     $timesheet->type = 'work';
                     $timesheet->save();
+
+                    Notification::make()
+                        ->title('Stop Pause Succefully')
+                        ->success()
+                        ->color('success')
+                        ->send();
                 }),
             Actions\CreateAction::make(),
         ];

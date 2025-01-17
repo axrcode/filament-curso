@@ -27,8 +27,12 @@ class PersonalPanelProvider extends PanelProvider
             ->path('personal')
             ->login()
             ->default()
+            ->profile(isSimple: false)
             ->colors([
+                'gray' => Color::Gray,
                 'primary' => Color::Blue,
+                'success' => Color::Emerald,
+                'warning' => Color::Orange,
             ])
             ->discoverResources(in: app_path('Filament/Personal/Resources'), for: 'App\\Filament\\Personal\\Resources')
             ->discoverPages(in: app_path('Filament/Personal/Pages'), for: 'App\\Filament\\Personal\\Pages')

@@ -32,6 +32,7 @@ class PersonalWidgetStats extends BaseWidget
     {
         $timesheets = Timesheet::where('user_id', $user->id)
             ->where('type', $type)
+            ->whereDate('created_at', Carbon::today())
             ->get();
 
         $sumSeconds = 0;
