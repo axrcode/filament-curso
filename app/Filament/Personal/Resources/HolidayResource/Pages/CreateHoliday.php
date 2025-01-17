@@ -3,8 +3,12 @@
 namespace App\Filament\Personal\Resources\HolidayResource\Pages;
 
 use App\Filament\Personal\Resources\HolidayResource;
+use App\Mail\HolidayPending;
+use App\Models\User;
 use Filament\Actions;
+use Filament\Notifications\Notification;
 use Filament\Resources\Pages\CreateRecord;
+use Illuminate\Support\Facades\Mail;
 
 class CreateHoliday extends CreateRecord
 {
@@ -19,6 +23,23 @@ class CreateHoliday extends CreateRecord
     {
         $data['user_id'] = auth()->user()->id;
         $data['type'] = 'pending';
+
+        $user = User::first();
+
+        $dataToSend = [
+            'day' => $data['day'],
+            'name' => User::find($data['user_id'])->name,
+            'email' => User::find($data['user_id'])->email,
+        ];
+
+        Mail::to($user)->send(new HolidayPending($dataToSend));
+
+        Notification::make()
+            ->title('Vacation Request')
+            ->body('On '.$data['day'].' it is pending approval')
+            ->info()
+            ->color('info')
+            ->send();
 
         return $data;
     }
