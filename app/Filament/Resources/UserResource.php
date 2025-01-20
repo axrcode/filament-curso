@@ -49,6 +49,11 @@ class UserResource extends Resource
                             ->hiddenOn('edit')
                             ->required()
                             ->maxLength(255),
+                        Forms\Components\Select::make('roles')
+                            ->relationship('roles', 'name')
+                            ->multiple()
+                            ->preload()
+                            ->searchable(),
                     ]),
                 Section::make('Address Info')
                     //->description('Address Info')
